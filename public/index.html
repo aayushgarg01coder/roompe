@@ -3,19 +3,289 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Roompe</title>
+    <meta name="description" content="Find a room and roommates who feel like home with Roompe." />
+    <title>Roompe — Find your kind of home</title>
     <style>
-      :root { font-family: system-ui, sans-serif; color: #172033; background: #f6f4ef; }
-      body { min-height: 100vh; margin: 0; display: grid; place-items: center; }
-      main { width: min(42rem, calc(100% - 3rem)); }
-      h1 { font-size: clamp(3rem, 10vw, 6rem); margin: 0; letter-spacing: -0.06em; }
-      p { font-size: 1.2rem; line-height: 1.6; color: #526078; }
+      :root {
+        --ink: #18332d;
+        --muted: #65736f;
+        --cream: #f8f7f1;
+        --paper: #fffefa;
+        --mint: #c8f06c;
+        --mint-dark: #9fd03b;
+        --green: #225c4d;
+        --orange: #ff8159;
+        --line: rgba(24, 51, 45, 0.12);
+        font-family: Inter, Avenir, "Segoe UI", sans-serif;
+        color: var(--ink);
+        background: var(--cream);
+        font-synthesis: none;
+      }
+
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        min-height: 100vh;
+        margin: 0;
+        background: radial-gradient(circle at 8% 0%, rgba(200, 240, 108, 0.32), transparent 30rem), var(--cream);
+      }
+      a { color: inherit; text-decoration: none; }
+      button, input { font: inherit; }
+      .shell { width: min(1180px, calc(100% - 40px)); margin-inline: auto; }
+
+      nav {
+        height: 88px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 32px;
+      }
+      .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 1.35rem;
+        font-weight: 800;
+        letter-spacing: -0.04em;
+      }
+      .brand-mark {
+        width: 34px;
+        height: 34px;
+        display: grid;
+        place-items: center;
+        border-radius: 11px 11px 11px 4px;
+        color: white;
+        background: var(--green);
+        box-shadow: 0 8px 20px rgba(34, 92, 77, 0.18);
+      }
+      .brand-mark svg { width: 19px; }
+      .nav-links { display: flex; align-items: center; gap: 34px; margin-left: auto; font-size: 0.94rem; font-weight: 600; }
+      .nav-links a { transition: color 180ms ease; }
+      .nav-links a:hover { color: var(--green); }
+
+      .button {
+        min-height: 46px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 0 21px;
+        border: 0;
+        border-radius: 14px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+      }
+      .button:hover { transform: translateY(-2px); }
+      .button-dark { color: white; background: var(--ink); box-shadow: 0 12px 28px rgba(24, 51, 45, 0.18); }
+      .button-mint { color: var(--ink); background: var(--mint); }
+      .button-mint:hover { background: #d5f68a; box-shadow: 0 12px 25px rgba(159, 208, 59, 0.24); }
+
+      .hero {
+        min-height: 650px;
+        display: grid;
+        grid-template-columns: 1.05fr 0.95fr;
+        align-items: center;
+        gap: clamp(40px, 6vw, 92px);
+        padding: 56px 0 88px;
+      }
+      .eyebrow {
+        width: fit-content;
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        margin: 0 0 22px;
+        padding: 8px 12px;
+        border: 1px solid rgba(34, 92, 77, 0.14);
+        border-radius: 999px;
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        background: rgba(255, 255, 255, 0.55);
+      }
+      .eyebrow span { width: 8px; height: 8px; border-radius: 50%; background: var(--orange); box-shadow: 0 0 0 4px rgba(255, 129, 89, 0.14); }
+      h1 { max-width: 680px; margin: 0; font-size: clamp(3.5rem, 6vw, 6.2rem); line-height: 0.98; letter-spacing: -0.065em; }
+      h1 em { position: relative; color: var(--green); font-style: normal; white-space: nowrap; }
+      h1 em::after {
+        content: "";
+        position: absolute;
+        left: 4%;
+        right: 0;
+        bottom: -8px;
+        height: 11px;
+        border-top: 4px solid var(--orange);
+        border-radius: 50%;
+        transform: rotate(-1deg);
+      }
+      .hero-copy > p:not(.eyebrow) { max-width: 550px; margin: 30px 0 32px; color: var(--muted); font-size: 1.12rem; line-height: 1.75; }
+
+      .search {
+        max-width: 590px;
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: center;
+        padding: 8px;
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        background: var(--paper);
+        box-shadow: 0 18px 50px rgba(38, 66, 59, 0.1);
+      }
+      .search-field { display: flex; align-items: center; gap: 12px; min-width: 0; padding: 0 14px; }
+      .search-field svg { width: 20px; flex: 0 0 auto; color: var(--green); }
+      .search-field input { width: 100%; border: 0; outline: 0; color: var(--ink); background: transparent; }
+      .search-field input::placeholder { color: #99a29f; }
+      .proof { display: flex; align-items: center; gap: 13px; margin-top: 28px; color: var(--muted); font-size: 0.88rem; }
+      .avatars { display: flex; }
+      .avatar { width: 34px; height: 34px; display: grid; place-items: center; margin-left: -8px; border: 3px solid var(--cream); border-radius: 50%; font-size: 0.72rem; font-weight: 800; }
+      .avatar:first-child { margin-left: 0; background: #ffd2b8; }
+      .avatar:nth-child(2) { background: #c5dff7; }
+      .avatar:nth-child(3) { background: #dfd0fa; }
+      .avatar:nth-child(4) { background: var(--mint); }
+      .proof strong { color: var(--ink); }
+
+      .visual { position: relative; min-height: 540px; }
+      .blob { position: absolute; inset: 16px 0 0 42px; border-radius: 48% 48% 38% 50% / 42% 43% 52% 52%; background: var(--green); transform: rotate(3deg); overflow: hidden; }
+      .blob::before, .blob::after { content: ""; position: absolute; border-radius: 50%; }
+      .blob::before { width: 300px; height: 300px; right: -120px; top: -100px; background: rgba(200, 240, 108, 0.24); }
+      .blob::after { width: 210px; height: 210px; left: -60px; bottom: -80px; border: 38px solid rgba(255, 255, 255, 0.08); }
+      .room { position: absolute; inset: 84px 26px 40px 92px; overflow: hidden; border-radius: 160px 160px 28px 28px; background: #eadbc9; box-shadow: 0 28px 60px rgba(11, 41, 33, 0.26); }
+      .room-wall { position: absolute; inset: 0 0 35%; background: #f3e5d5; }
+      .window { position: absolute; width: 42%; height: 39%; top: 17%; left: 12%; border: 10px solid #fffaf1; background: linear-gradient(145deg, #addbe0, #def2e9); box-shadow: inset 0 0 0 2px rgba(34, 92, 77, 0.12); }
+      .window::before { content: ""; position: absolute; inset: 0 48%; background: #fffaf1; }
+      .window::after { content: ""; position: absolute; inset: 48% 0; background: #fffaf1; }
+      .sun { position: absolute; width: 44px; height: 44px; top: 18px; right: 20px; border-radius: 50%; background: #ffd674; }
+      .hill { position: absolute; width: 120%; height: 55%; left: -10%; bottom: -18%; border-radius: 50% 50% 0 0; background: #86bc8e; }
+      .sofa { position: absolute; width: 58%; height: 27%; right: 8%; bottom: 17%; border-radius: 28px 28px 12px 12px; background: #ee8969; box-shadow: 0 16px 0 #d86f52; }
+      .sofa::before, .sofa::after { content: ""; position: absolute; top: 12px; width: 44%; height: 68%; border: 2px solid rgba(94, 43, 31, 0.12); border-radius: 18px; }
+      .sofa::before { left: 4%; }
+      .sofa::after { right: 4%; }
+      .plant { position: absolute; left: 9%; bottom: 10%; width: 60px; height: 110px; }
+      .pot { position: absolute; bottom: 0; left: 13px; width: 38px; height: 42px; background: #d3a06f; clip-path: polygon(0 0, 100% 0, 82% 100%, 18% 100%); }
+      .leaf { position: absolute; width: 32px; height: 58px; border-radius: 100% 0 100% 0; background: #4e8d66; transform-origin: bottom right; }
+      .leaf.one { left: 26px; top: 6px; transform: rotate(8deg); }
+      .leaf.two { left: 5px; top: 24px; transform: rotate(-48deg); }
+      .leaf.three { left: 29px; top: 35px; transform: rotate(41deg); }
+
+      .match-card { position: absolute; left: 0; bottom: 26px; width: 220px; padding: 16px; border: 1px solid rgba(255, 255, 255, 0.7); border-radius: 20px; background: rgba(255, 255, 255, 0.92); box-shadow: 0 18px 45px rgba(21, 54, 45, 0.18); backdrop-filter: blur(10px); }
+      .match-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 13px; }
+      .match-person { display: flex; align-items: center; gap: 9px; font-weight: 700; }
+      .match-face { width: 36px; height: 36px; display: grid; place-items: center; border-radius: 12px; background: #dfd0fa; }
+      .match-score { padding: 5px 8px; border-radius: 8px; color: var(--green); background: #eaf6cb; font-size: 0.75rem; font-weight: 800; }
+      .meter { height: 7px; overflow: hidden; border-radius: 99px; background: #edf0ed; }
+      .meter span { display: block; width: 94%; height: 100%; border-radius: inherit; background: var(--mint-dark); }
+      .location-pill { position: absolute; top: 44px; right: -16px; display: flex; align-items: center; gap: 8px; padding: 12px 15px; border-radius: 14px; background: var(--paper); box-shadow: 0 14px 32px rgba(21, 54, 45, 0.15); font-size: 0.84rem; font-weight: 700; }
+      .location-pill svg { width: 18px; color: var(--orange); }
+
+      .benefits { padding: 36px 0 80px; }
+      .benefit-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+      .benefit { display: flex; gap: 16px; padding: 24px; border: 1px solid var(--line); border-radius: 22px; background: rgba(255, 255, 255, 0.55); }
+      .benefit-icon { width: 46px; height: 46px; flex: 0 0 auto; display: grid; place-items: center; border-radius: 14px; background: #eaf6cb; }
+      .benefit-icon svg { width: 22px; }
+      .benefit h2 { margin: 1px 0 7px; font-size: 1rem; }
+      .benefit p { margin: 0; color: var(--muted); font-size: 0.88rem; line-height: 1.55; }
+
+      @media (max-width: 900px) {
+        .nav-links { display: none; }
+        .hero { grid-template-columns: 1fr; padding-top: 42px; }
+        .hero-copy { text-align: center; }
+        .eyebrow, .search { margin-inline: auto; }
+        .hero-copy > p:not(.eyebrow) { margin-inline: auto; }
+        .proof { justify-content: center; }
+        .visual { width: min(560px, 100%); margin: 0 auto; }
+      }
+      @media (max-width: 650px) {
+        .shell { width: min(100% - 24px, 1180px); }
+        nav { height: 72px; }
+        nav > .button { min-height: 42px; padding-inline: 15px; }
+        h1 { font-size: clamp(3rem, 16vw, 4.4rem); }
+        .hero { gap: 16px; padding-bottom: 56px; }
+        .search { grid-template-columns: 1fr; gap: 8px; }
+        .search-field { min-height: 46px; }
+        .search .button { width: 100%; }
+        .proof { align-items: flex-start; }
+        .visual { min-height: 470px; transform: scale(0.92); }
+        .blob { left: 25px; }
+        .room { left: 66px; }
+        .location-pill { right: 0; }
+        .benefit-grid { grid-template-columns: 1fr; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        html { scroll-behavior: auto; }
+        *, *::before, *::after { transition-duration: 0.01ms !important; }
+      }
     </style>
   </head>
   <body>
+    <header class="shell">
+      <nav aria-label="Main navigation">
+        <a class="brand" href="#" aria-label="Roompe home">
+          <span class="brand-mark"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 11.5 12 5l8 6.5v7a1 1 0 0 1-1 1h-5v-5h-4v5H5a1 1 0 0 1-1-1v-7Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></span>
+          Roompe
+        </a>
+        <div class="nav-links">
+          <a href="#discover">Find a room</a>
+          <a href="#benefits">How it works</a>
+          <a href="#benefits">Why Roompe</a>
+        </div>
+        <a class="button button-dark" href="#discover">List your room</a>
+      </nav>
+    </header>
+
     <main>
-      <h1>Roompe</h1>
-      <p>The project is ready for its first feature.</p>
+      <section class="hero shell" id="discover">
+        <div class="hero-copy">
+          <p class="eyebrow"><span></span> A better way to share a home</p>
+          <h1>Find your room. Meet your <em>people.</em></h1>
+          <p>Discover welcoming spaces and compatible roommates, all in one place. Because the right home is about more than four walls.</p>
+          <form class="search" action="#" onsubmit="event.preventDefault()">
+            <label class="search-field">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.5" stroke="currentColor" stroke-width="2"/></svg>
+              <input type="search" aria-label="Search city or neighborhood" placeholder="Where do you want to live?" />
+            </label>
+            <button class="button button-mint" type="submit">Explore rooms <span aria-hidden="true">→</span></button>
+          </form>
+          <div class="proof">
+            <div class="avatars" aria-hidden="true"><span class="avatar">AK</span><span class="avatar">JM</span><span class="avatar">RS</span><span class="avatar">+</span></div>
+            <span>Trusted by <strong>12,000+ renters</strong> finding home together</span>
+          </div>
+        </div>
+
+        <div class="visual" aria-label="A warm, welcoming shared living room">
+          <div class="blob"></div>
+          <div class="room" role="img">
+            <div class="room-wall"></div>
+            <div class="window"><span class="sun"></span><span class="hill"></span></div>
+            <div class="sofa"></div>
+            <div class="plant"><span class="leaf one"></span><span class="leaf two"></span><span class="leaf three"></span><span class="pot"></span></div>
+          </div>
+          <div class="location-pill">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.5" fill="currentColor"/></svg>
+            240+ homes nearby
+          </div>
+          <div class="match-card">
+            <div class="match-top"><div class="match-person"><span class="match-face">M</span> Maya</div><span class="match-score">94% match</span></div>
+            <div class="meter" aria-label="94 percent roommate match"><span></span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="benefits shell" id="benefits" aria-label="Why choose Roompe">
+        <div class="benefit-grid">
+          <article class="benefit">
+            <span class="benefit-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m8 12 2.5 2.5L16 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 3 4.5 6v5.5c0 4.5 3.2 7.8 7.5 9.5 4.3-1.7 7.5-5 7.5-9.5V6L12 3Z" stroke="currentColor" stroke-width="2"/></svg></span>
+            <div><h2>Verified and trusted</h2><p>Profiles and listings are reviewed so you can search with confidence.</p></div>
+          </article>
+          <article class="benefit">
+            <span class="benefit-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm8-1a3 3 0 1 0 0-6" stroke="currentColor" stroke-width="2"/><path d="M2 20c.5-4 2.5-6 6-6s5.5 2 6 6m1-6c3 0 5 1.6 5.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+            <div><h2>People-first matching</h2><p>Find roommates who fit your habits, values, and everyday rhythm.</p></div>
+          </article>
+          <article class="benefit">
+            <span class="benefit-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 10.5 12 4l8 6.5V20H4v-9.5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 20v-6h6v6" stroke="currentColor" stroke-width="2"/></svg></span>
+            <div><h2>Spaces that feel right</h2><p>Explore clear listings with the details that actually matter to you.</p></div>
+          </article>
+        </div>
+      </section>
     </main>
   </body>
 </html>
