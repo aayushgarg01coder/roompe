@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Find a room and roommates who feel like home with Roompe." />
-    <title>Roompe — Find your kind of home</title>
+    <meta name="description" content="Get orders picked up from your campus gate and delivered to your hostel room by fellow students." />
+    <title>Roompe — Gate to room, delivered</title>
     <style>
       :root {
         --ink: #18332d;
@@ -149,28 +149,64 @@
       .blob::before, .blob::after { content: ""; position: absolute; border-radius: 50%; }
       .blob::before { width: 300px; height: 300px; right: -120px; top: -100px; background: rgba(200, 240, 108, 0.24); }
       .blob::after { width: 210px; height: 210px; left: -60px; bottom: -80px; border: 38px solid rgba(255, 255, 255, 0.08); }
-      .room { position: absolute; inset: 84px 26px 40px 92px; overflow: hidden; border-radius: 160px 160px 28px 28px; background: #eadbc9; box-shadow: 0 28px 60px rgba(11, 41, 33, 0.26); }
-      .room-wall { position: absolute; inset: 0 0 35%; background: #f3e5d5; }
-      .window { position: absolute; width: 42%; height: 39%; top: 17%; left: 12%; border: 10px solid #fffaf1; background: linear-gradient(145deg, #addbe0, #def2e9); box-shadow: inset 0 0 0 2px rgba(34, 92, 77, 0.12); }
-      .window::before { content: ""; position: absolute; inset: 0 48%; background: #fffaf1; }
-      .window::after { content: ""; position: absolute; inset: 48% 0; background: #fffaf1; }
-      .sun { position: absolute; width: 44px; height: 44px; top: 18px; right: 20px; border-radius: 50%; background: #ffd674; }
-      .hill { position: absolute; width: 120%; height: 55%; left: -10%; bottom: -18%; border-radius: 50% 50% 0 0; background: #86bc8e; }
-      .sofa { position: absolute; width: 58%; height: 27%; right: 8%; bottom: 17%; border-radius: 28px 28px 12px 12px; background: #ee8969; box-shadow: 0 16px 0 #d86f52; }
-      .sofa::before, .sofa::after { content: ""; position: absolute; top: 12px; width: 44%; height: 68%; border: 2px solid rgba(94, 43, 31, 0.12); border-radius: 18px; }
-      .sofa::before { left: 4%; }
-      .sofa::after { right: 4%; }
-      .plant { position: absolute; left: 9%; bottom: 10%; width: 60px; height: 110px; }
-      .pot { position: absolute; bottom: 0; left: 13px; width: 38px; height: 42px; background: #d3a06f; clip-path: polygon(0 0, 100% 0, 82% 100%, 18% 100%); }
-      .leaf { position: absolute; width: 32px; height: 58px; border-radius: 100% 0 100% 0; background: #4e8d66; transform-origin: bottom right; }
-      .leaf.one { left: 26px; top: 6px; transform: rotate(8deg); }
-      .leaf.two { left: 5px; top: 24px; transform: rotate(-48deg); }
-      .leaf.three { left: 29px; top: 35px; transform: rotate(41deg); }
+      .campus-card {
+        position: absolute;
+        inset: 68px 24px 42px 76px;
+        overflow: hidden;
+        border: 10px solid rgba(255, 255, 255, 0.9);
+        border-radius: 36px;
+        background-color: #f3eddf;
+        background-image: linear-gradient(rgba(34, 92, 77, 0.055) 1px, transparent 1px), linear-gradient(90deg, rgba(34, 92, 77, 0.055) 1px, transparent 1px);
+        background-size: 30px 30px;
+        box-shadow: 0 28px 60px rgba(11, 41, 33, 0.26);
+      }
+      .campus-card::before, .campus-card::after { content: ""; position: absolute; border-radius: 999px; background: rgba(134, 188, 142, 0.25); }
+      .campus-card::before { width: 220px; height: 70px; right: -35px; top: 35px; transform: rotate(-16deg); }
+      .campus-card::after { width: 180px; height: 54px; left: -45px; bottom: 80px; transform: rotate(18deg); }
+      .route { position: absolute; inset: 64px 50px 82px; width: calc(100% - 100px); height: calc(100% - 146px); overflow: visible; }
+      .route path { fill: none; stroke: var(--orange); stroke-width: 4; stroke-linecap: round; stroke-dasharray: 7 11; }
+      .map-node { position: absolute; z-index: 2; display: grid; justify-items: center; gap: 8px; color: var(--ink); font-size: 0.73rem; font-weight: 800; }
+      .map-node span { width: 58px; height: 58px; display: grid; place-items: center; border: 5px solid white; border-radius: 18px; box-shadow: 0 8px 18px rgba(24, 51, 45, 0.14); }
+      .map-node svg { width: 26px; }
+      .gate-node { left: 34px; bottom: 36px; }
+      .gate-node span { color: white; background: var(--green); }
+      .hostel-node { right: 28px; top: 28px; }
+      .hostel-node span { background: var(--mint); }
+      .runner {
+        position: absolute;
+        z-index: 3;
+        left: 47%;
+        top: 44%;
+        width: 58px;
+        height: 58px;
+        display: grid;
+        place-items: center;
+        border: 5px solid white;
+        border-radius: 50%;
+        color: white;
+        background: var(--orange);
+        box-shadow: 0 10px 22px rgba(255, 129, 89, 0.34);
+        transform: rotate(-4deg);
+      }
+      .runner svg { width: 27px; }
+      .parcel {
+        position: absolute;
+        z-index: 2;
+        right: 36px;
+        bottom: 38px;
+        padding: 8px 11px;
+        border-radius: 11px;
+        color: var(--green);
+        background: white;
+        box-shadow: 0 8px 18px rgba(24, 51, 45, 0.12);
+        font-size: 0.72rem;
+        font-weight: 800;
+      }
 
       .match-card { position: absolute; left: 0; bottom: 26px; width: 220px; padding: 16px; border: 1px solid rgba(255, 255, 255, 0.7); border-radius: 20px; background: rgba(255, 255, 255, 0.92); box-shadow: 0 18px 45px rgba(21, 54, 45, 0.18); backdrop-filter: blur(10px); }
       .match-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 13px; }
       .match-person { display: flex; align-items: center; gap: 9px; font-weight: 700; }
-      .match-face { width: 36px; height: 36px; display: grid; place-items: center; border-radius: 12px; background: #dfd0fa; }
+      .match-face { width: 36px; height: 36px; display: grid; place-items: center; border-radius: 12px; background: #ffd2b8; }
       .match-score { padding: 5px 8px; border-radius: 8px; color: var(--green); background: #eaf6cb; font-size: 0.75rem; font-weight: 800; }
       .meter { height: 7px; overflow: hidden; border-radius: 99px; background: #edf0ed; }
       .meter span { display: block; width: 94%; height: 100%; border-radius: inherit; background: var(--mint-dark); }
@@ -206,7 +242,7 @@
         .proof { align-items: flex-start; }
         .visual { min-height: 470px; transform: scale(0.92); }
         .blob { left: 25px; }
-        .room { left: 66px; }
+        .campus-card { left: 54px; }
         .location-pill { right: 0; }
         .benefit-grid { grid-template-columns: 1fr; }
       }
@@ -224,48 +260,55 @@
           Roompe
         </a>
         <div class="nav-links">
-          <a href="#discover">Find a room</a>
+          <a href="#discover">Send an order</a>
           <a href="#benefits">How it works</a>
-          <a href="#benefits">Why Roompe</a>
+          <a href="#benefits">Deliver & earn</a>
         </div>
-        <a class="button button-dark" href="#discover">List your room</a>
+        <a class="button button-dark" href="#discover">Become a runner</a>
       </nav>
     </header>
 
     <main>
       <section class="hero shell" id="discover">
         <div class="hero-copy">
-          <p class="eyebrow"><span></span> A better way to share a home</p>
-          <h1>Find your room. Meet your <em>people.</em></h1>
-          <p>Discover welcoming spaces and compatible roommates, all in one place. Because the right home is about more than four walls.</p>
+          <p class="eyebrow"><span></span> Built by students, for students</p>
+          <h1>From the gate to your <em>room.</em></h1>
+          <p>Stuck in your hostel while your order waits at the campus gate? A fellow student can pick it up and bring it straight to your door.</p>
           <form class="search" action="#" onsubmit="event.preventDefault()">
             <label class="search-field">
-              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.5" stroke="currentColor" stroke-width="2"/></svg>
-              <input type="search" aria-label="Search city or neighborhood" placeholder="Where do you want to live?" />
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 8h16l-1 12H5L4 8Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M8 9V6a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="2"/></svg>
+              <input type="text" aria-label="Hostel and room number" placeholder="Hostel and room number" />
             </label>
-            <button class="button button-mint" type="submit">Explore rooms <span aria-hidden="true">→</span></button>
+            <button class="button button-mint" type="submit">Request pickup <span aria-hidden="true">→</span></button>
           </form>
           <div class="proof">
             <div class="avatars" aria-hidden="true"><span class="avatar">AK</span><span class="avatar">JM</span><span class="avatar">RS</span><span class="avatar">+</span></div>
-            <span>Trusted by <strong>12,000+ renters</strong> finding home together</span>
+            <span><strong>Students help students</strong> and earn on every delivery</span>
           </div>
         </div>
 
-        <div class="visual" aria-label="A warm, welcoming shared living room">
+        <div class="visual" aria-label="An order moving from the campus gate to a hostel room">
           <div class="blob"></div>
-          <div class="room" role="img">
-            <div class="room-wall"></div>
-            <div class="window"><span class="sun"></span><span class="hill"></span></div>
-            <div class="sofa"></div>
-            <div class="plant"><span class="leaf one"></span><span class="leaf two"></span><span class="leaf three"></span><span class="pot"></span></div>
+          <div class="campus-card" role="img">
+            <svg class="route" viewBox="0 0 300 240" preserveAspectRatio="none" aria-hidden="true"><path d="M18 205 C60 140, 106 210, 145 132 S230 88, 280 28"/></svg>
+            <div class="map-node gate-node">
+              <span><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 20V8m16 12V8M2 8h20M5 8l2-4h10l2 4M9 20v-6h6v6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              Campus gate
+            </div>
+            <div class="map-node hostel-node">
+              <span><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 21V5h14v16M9 9h2m2 0h2m-6 4h2m2 0h2m-6 4h2m2 0h2M3 21h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+              Hostel C
+            </div>
+            <div class="runner"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="13" cy="5" r="2" stroke="currentColor" stroke-width="2"/><path d="m10 10 3-2 3 3 3 1M13 8l-2 5-4 2m4-2 3 3-1 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div class="parcel">📦 Order #284</div>
           </div>
           <div class="location-pill">
-            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.5" fill="currentColor"/></svg>
-            240+ homes nearby
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 7v5l3 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            Arriving in 6 min
           </div>
           <div class="match-card">
-            <div class="match-top"><div class="match-person"><span class="match-face">M</span> Maya</div><span class="match-score">94% match</span></div>
-            <div class="meter" aria-label="94 percent roommate match"><span></span></div>
+            <div class="match-top"><div class="match-person"><span class="match-face">A</span> Aman picked it up</div><span class="match-score">₹25 earned</span></div>
+            <div class="meter" aria-label="Delivery progress"><span></span></div>
           </div>
         </div>
       </section>
@@ -274,15 +317,15 @@
         <div class="benefit-grid">
           <article class="benefit">
             <span class="benefit-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m8 12 2.5 2.5L16 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 3 4.5 6v5.5c0 4.5 3.2 7.8 7.5 9.5 4.3-1.7 7.5-5 7.5-9.5V6L12 3Z" stroke="currentColor" stroke-width="2"/></svg></span>
-            <div><h2>Verified and trusted</h2><p>Profiles and listings are reviewed so you can search with confidence.</p></div>
+            <div><h2>Request a pickup</h2><p>Share your gate, hostel, room number, and order details in seconds.</p></div>
           </article>
           <article class="benefit">
             <span class="benefit-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm8-1a3 3 0 1 0 0-6" stroke="currentColor" stroke-width="2"/><path d="M2 20c.5-4 2.5-6 6-6s5.5 2 6 6m1-6c3 0 5 1.6 5.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
-            <div><h2>People-first matching</h2><p>Find roommates who fit your habits, values, and everyday rhythm.</p></div>
+            <div><h2>A student accepts</h2><p>Someone already near the gate picks up your order and earns a fee.</p></div>
           </article>
           <article class="benefit">
             <span class="benefit-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 10.5 12 4l8 6.5V20H4v-9.5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 20v-6h6v6" stroke="currentColor" stroke-width="2"/></svg></span>
-            <div><h2>Spaces that feel right</h2><p>Explore clear listings with the details that actually matter to you.</p></div>
+            <div><h2>Delivered to your door</h2><p>Track the handoff and receive your order right at your hostel room.</p></div>
           </article>
         </div>
       </section>
